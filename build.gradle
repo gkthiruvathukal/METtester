@@ -1,0 +1,64 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.11
+version = '1.0'
+
+jar {
+    manifest {
+        attributes(
+            "Main-Class": "METTester"
+        )
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+
+sourceSets {
+    main {
+      java {
+        srcDir 'src'
+      }
+
+      resources {
+        srcDir 'resources'
+      }
+
+    }
+}
+repositories {
+    mavenCentral()
+}
+    
+
+dependencies {
+    // compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    compile group: 'junit', name: 'junit', version: '4.+'
+
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+
+    // https://mvnrepository.com/artifact/org.hamcrest/hamcrest
+    compile group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
+    
+
+    // jars that are not in the maven repository as far as I can tell
+    implementation files('lib/openjava.jar')
+    implementation files('lib/tools.jar')
+    implementation files('lib/evosuite-1.0.6.jar')
+    implementation files('lib/mujava.jar')
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
